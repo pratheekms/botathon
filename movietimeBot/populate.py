@@ -52,8 +52,8 @@ def populate_movieproperties():
 			movie_obj.aspect_ratio = row[28]
 			movie_obj.movie_facebook_likes = row[29]
 			movie_obj.save()
-			genre_list = [x for x in row[12].split('|')]
-			plot_list = [x for x in row[12].split('|')]
+			genre_list = [x for x in row[10].split('|')]
+			plot_list = [x for x in row[17].split('|')]
 			for genre in genre_list:
 				genre_obj  = Genre.objects.get(genre_name='%s' % genre)
 				movie_obj.genre.add(genre_obj)

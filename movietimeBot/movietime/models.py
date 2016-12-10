@@ -16,7 +16,7 @@ class Genre(models.Model):
 	
 
 	def __unicode__(self):
-		return self.genre_name
+		return unicode(self.genre_name) or u''
 
 
 class PlotLine(models.Model):
@@ -24,7 +24,7 @@ class PlotLine(models.Model):
 	plot_name = models.CharField(max_length=200, blank=True, null=True)
 	
 	def __unicode__(self):
-		return self.plot_name
+		return unicode(self.plot_name) or u''
 
 
 
@@ -64,7 +64,7 @@ class MovieProperties(models.Model):
 	plotline = models.ManyToManyField(PlotLine)
 
 	def __unicode__(self):
-		return self.movie_title
+		return unicode(self.movie_title) or u''
 
 
 
