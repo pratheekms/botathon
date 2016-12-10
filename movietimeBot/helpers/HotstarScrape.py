@@ -99,5 +99,5 @@ class myScraper(object):
 			return response
 
 if __name__ == '__main__':
-	scraper = myScraper()
+	scraper = myScraper('last bus')
 	scraper.scrape()
