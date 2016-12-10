@@ -1,11 +1,9 @@
 from urllib2 import Request, urlopen, URLError
 import re
 
-#Changes made in the below two line
-movies = ['need for speed', 'fast and furious']
 string = []
 
-def get_tastekid_movie():
+def get_tastekid_movie(movies):
     for movie in movies:
         rep_spa = re.sub(' ','+',movie)
         clean_str = re.sub('&','and',rep_spa)
