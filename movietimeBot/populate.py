@@ -11,9 +11,13 @@ import csv
 
 def populate_movieproperties():
 
+
+	print "inside populate movieprop"
 	with open('movie_metadata.csv', 'r') as f:
 		reader =  csv.reader(f, delimiter = '\t', qoutechar = '"')
 		for i, row in enumerate(reader):
+
+			print i, "th iteration"
 			if i == 0:
 				continue
 			movie_obj = MovieProperties()
@@ -59,17 +63,24 @@ def populate_movieproperties():
 
 def populate_genre():
 
+	print "inside populate genre"
 	with open('genre.txt', 'r') as f:
+		i = 0
 		for line in f:
+			print i, "th iteration plot"
 			genre = Genre()
 			genre.genre_name = line.strip()
 			genre.save()
+			i+=1
 
 
 def populte_plot():
 
+	print "inside populate plot"
 	with open('plot.txt', 'r') as f:
+		i=0
 		for line in f:
+			print i, "th iteration plot"
 			plot = PlotLine()
 			plot.plot_name = line.strip()
 			plot.save()
