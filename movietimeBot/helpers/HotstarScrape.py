@@ -11,8 +11,7 @@ import time
 import urllib
 
 movie = 'need for speed'
-movie_input_1 = re.sub(' ','%20',movie)
-movie_input = re.sub('&', '%26', movie_input_1)
+movie_input = urllib.quote_plus(movie)
 response = ''
 
 
@@ -29,71 +28,75 @@ class myScraper(object):
 	# browser.set_window_size(1120, 550)
 
 	def scrape(self):
-		browser = webdriver.Firefox()
-		browser.get(self.url)
+		try:
+			browser = webdriver.Firefox()
+			browser.get(self.url)
 
-		# browser.find_element_by_xpath('//*[@id="app-main-view"]/div/div[1]/div/div[1]/h3')
+			# browser.find_element_by_xpath('//*[@id="app-main-view"]/div/div[1]/div/div[1]/h3')
 
-		# element_to_hover_over = browser.find_element_by_xpath('//*[@id="app-main-view"]/div/div[2]/div/hs-cards-directive/article/a/div[3]')
-		# hover = ActionChains(browser).move_to_element(element_to_hover_over)
-		# hover.perform()
-		# time.sleep(2)
-		# name = browser.find_element_by_xpath('//*[@id="tooltip-container"]/p[2]')
-		# print name.text()
+			# element_to_hover_over = browser.find_element_by_xpath('//*[@id="app-main-view"]/div/div[2]/div/hs-cards-directive/article/a/div[3]')
+			# hover = ActionChains(browser).move_to_element(element_to_hover_over)
+			# hover.perform()
+			# time.sleep(2)
+			# name = browser.find_element_by_xpath('//*[@id="tooltip-container"]/p[2]')
+			# print name.text()
 
-		# browser.find_element_by_xpath('//*[@id="autoCompleteSearchId"]').send_keys(movie)
-		browser.find_element_by_xpath('//*[@id="app-main-view"]/div/div[2]/div/hs-cards-directive/article/a/div[3]').click()
+			# browser.find_element_by_xpath('//*[@id="autoCompleteSearchId"]').send_keys(movie)
+			browser.find_element_by_xpath('//*[@id="app-main-view"]/div/div[2]/div/hs-cards-directive/article/a/div[3]').click()
 
 
-		movies = BeautifulSoup(browser.page_source, "html.parser")
-		name= movies.text.lower()
-		# print name
-		# time.sleep(2)
-		# try:
-		# 	movie_name = browser.find_element_by_xpath('//*[@id="title-card-undefined-0"]').click()
-		# 	time.sleep(2)
-		# 	movies = BeautifulSoup(browser.page_source, "html.parser")
-		# 	name= movies.text.lower()
-		# 	# movie_t = browser.find_element_by_class_name('title has-jawbone-nav-transition')
-		# 	# print movie_t
-		# 	# movie_text = browser.find_element_by_class_name('title has-jawbone-nav-transition').text()
-		# 	# print movie_text
-		# except Exception as e:
-		# 	pass
-		#
-		# # browser.find_element_by_xpath('//*[@id="hdPinTarget"]/div/div[3]/div/div').click()
-		# # browser.find_element_by_xpath('//*[@id="hdPinTarget"]/div/div[3]/div/div[2]/ul[3]/li[3]/a').click()
-		# # # if 'var searchJson =' in movies_list.text:
-		# #
-		# # # match = re.search(r'var searchJson =', list, re.I)
-		# # # match_end = re.search(r'var thumbImageUrl', list, re.I)
-		# # # movies_block = list[match.start():match_end]
-		# # # print movies_block
-		# #
-		# #
-		self.display.stop()
-		browser.quit()
-		if movie in name:
-			response = True
-		# #
-		# # else :
-		# # 	browser.find_element_by_xpath('//*[@id="tabs"]/li[2]/a').click()
-		# # 	movies_list_cs = BeautifulSoup(browser.page_source, "html.parser")
-		# # 	if movie in movies_list_cs.text.lower():
-		# # 		response = movie + ' is coming soon on PVR'
-		else :
-			response = False
-		# # #
-		print response
-		return response
-		# # browser.find_element_by_id('webId').send_keys(username)
-		# # browser.find_element_by_id('password').clear()
-		# # browser.find_element_by_id('password').send_keys(password)
-		# # browser.find_element_by_id('searchBtn').submit()
-		# # wait = WebDriverWait(browser, 10)
-		# # wait.until(lambda driver: driver.find_element_by_id('previewPrefDialog'))
-		#
-
+			movies = BeautifulSoup(browser.page_source, "html.parser")
+			name= movies.text.lower()
+			# print name
+			# time.sleep(2)
+			# try:
+			# 	movie_name = browser.find_element_by_xpath('//*[@id="title-card-undefined-0"]').click()
+			# 	time.sleep(2)
+			# 	movies = BeautifulSoup(browser.page_source, "html.parser")
+			# 	name= movies.text.lower()
+			# 	# movie_t = browser.find_element_by_class_name('title has-jawbone-nav-transition')
+			# 	# print movie_t
+			# 	# movie_text = browser.find_element_by_class_name('title has-jawbone-nav-transition').text()
+			# 	# print movie_text
+			# except Exception as e:
+			# 	pass
+			#
+			# # browser.find_element_by_xpath('//*[@id="hdPinTarget"]/div/div[3]/div/div').click()
+			# # browser.find_element_by_xpath('//*[@id="hdPinTarget"]/div/div[3]/div/div[2]/ul[3]/li[3]/a').click()
+			# # # if 'var searchJson =' in movies_list.text:
+			# #
+			# # # match = re.search(r'var searchJson =', list, re.I)
+			# # # match_end = re.search(r'var thumbImageUrl', list, re.I)
+			# # # movies_block = list[match.start():match_end]
+			# # # print movies_block
+			# #
+			# #
+			self.display.stop()
+			browser.quit()
+			if movie in name:
+				response = True
+			# #
+			# # else :
+			# # 	browser.find_element_by_xpath('//*[@id="tabs"]/li[2]/a').click()
+			# # 	movies_list_cs = BeautifulSoup(browser.page_source, "html.parser")
+			# # 	if movie in movies_list_cs.text.lower():
+			# # 		response = movie + ' is coming soon on PVR'
+			else :
+				response = False
+			# # #
+			print response
+			return response
+			# # browser.find_element_by_id('webId').send_keys(username)
+			# # browser.find_element_by_id('password').clear()
+			# # browser.find_element_by_id('password').send_keys(password)
+			# # browser.find_element_by_id('searchBtn').submit()
+			# # wait = WebDriverWait(browser, 10)
+			# # wait.until(lambda driver: driver.find_element_by_id('previewPrefDialog'))
+			#
+		except :
+			print 'Hotstar Except BLOCK'
+			response = false
+			return response
 
 if __name__ == '__main__':
 	scraper = myScraper()
