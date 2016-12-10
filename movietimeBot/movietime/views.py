@@ -33,17 +33,33 @@ class MovieTimeBot(generic.View):
 		for entry in incoming_message['entry']:
 			for message in entry['messaging']:
 				if 'message' in message:
+					print message, "message"
 					print message['sender']['id']
+					
+					# step 1 replying with a user
 					fb_id = message['sender']['id']
-					user_details_url = "https://graph.facebook.com/v2.6/%s"%fb_id
-					user_details_params = {'fields':'first_name,last_name,profile_pic', 'access_token':'%s' % self.access_token}
-					user_details = requests.get(user_details_url, user_details_params).json()
-					print user_details
-					first_name = user_details['first_name']
-					check_message = "Yo, %s!!" % first_name
-					post_message_url = 'https://graph.facebook.com/v2.6/me/messages?access_token=%s' % self.access_token 
-					response_msg = json.dumps({"recipient":{"id":fb_id}, "message":{"text": check_message}})
-					status = requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg)
-					return HttpResponse()
+					print user_details, "user details"
+					if 'first_name' in user_details:
+						first_name = user_details['first_name']
+						check_message = "Yo, %s!! let me get fixed you with a movie right away" % first_name
+						post_message_url = 'https://graph.facebook.com/v2.6/me/messages?access_token=%s' % self.access_token 
+						response_msg = json.dumps({"recipient":{"id":fb_id}, "message":{"text": check_message}})
+						status = requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg)
+		
+						# movie_list
+						# movies_details_url = "https://graph.facebook.com/v2.6/%s/movies"%fb_id
+						# movies_details_params = {'access_token':'%s' % self.access_token}
+						# movies_details = requests.get(movies_details_url, movies_details_params).json()
+
+
+
+						
+		return HttpResponse()
+
+		# movies_list_url = "https://graph.facebook.com/v2.6/%s/movies" % fb_id
+		# 				movies_details_params = {'access_token':'%s' % self.access_token}
+		# 				movies_details = requests.get(movies_list_url, movies_details_params).json()
+		# 				post_message_url = 'https://graph.facebook.com/v2.6/me/messages?access_token=%s' % self.access_token
+		# 				response_msg = json.dumps({"recipient":{"id":fb_id}, "message":{"text": movies_details}})
 
 
