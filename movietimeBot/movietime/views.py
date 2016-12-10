@@ -4,6 +4,7 @@ from django.utils.decorators import method_decorator
 from django.http.response import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
+import requests
 
 # Create your views here.
 
@@ -28,8 +29,12 @@ class MovieTimeBot(generic.View):
 		for entry in incoming_message['entry']:
 			for message in entry['messaging']:
 				if 'message' in message:
-					print message
-					user_details_url = "https://graph.facebook.com/v2.6/%s"%fbid
+					print message['sender']['id']
+					fb_id = message['sender']['id']
+					user_details_url = "https://graph.facebook.com/v2.6/%s"%fb_id
+					user_details_params = {'fields':'first_name,last_name,profile_pic', 'access_token':'<page-access-token>'}
+					user_details = requests.get(user_details_url, user_details_params).json()
+					print user_details
 			return HttpResponse()
 
 
