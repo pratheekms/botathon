@@ -12,54 +12,50 @@ class UserSteps(models.Model):
 
 class Genre(models.Model):
 
-	genre_name = models.CharField(max_length=200,blank=True, null=True)
+	genrename = models.CharField(max_length=200,blank=True, null=True)
 	
 
 	def __unicode__(self):
 		return unicode(self.genre_name) or u''
 
-
 class PlotLine(models.Model):
 
-	plot_name = models.CharField(max_length=200, blank=True, null=True)
+	plotname = models.CharField(max_length=200, blank=True, null=True)
 	
 	def __unicode__(self):
 		return unicode(self.plot_name) or u''
-
 
 
 class MovieProperties(models.Model):
 
 	color = models.CharField(max_length=200, blank=False, null=False)
 	director_name = models.CharField(max_length=100, blank=False, null=False)
-	num_critic_for_reviews = models.IntegerField()
-	duration = models.IntegerField()
-	director_facebook_like = models.IntegerField()
-	duration = models.IntegerField()
-	director_facebook_likes = models.IntegerField()
-	actor_3_facebook_likes = models.IntegerField()
-	actor_2_name = models.IntegerField()
-	actor_1_facebook_likes = models.IntegerField()
-	gross = models.IntegerField()
-	genres = models.CharField(max_length=200,blank=True, null=True)
+	num_critic_for_reviews = models.IntegerField(default=0)
+	duration = models.IntegerField(default=0)
+	director_facebook_like = models.IntegerField(default=0)
+	actor_3_facebook_likes = models.IntegerField(default=0)
+	actor_2_name = models.CharField(max_length=200,blank=True, null=True)
+	actor_1_facebook_likes = models.IntegerField(default=0)
+	gross = models.IntegerField(default=0)
+	genres_ignore = models.CharField(max_length=200,blank=True, null=True)
 	actor_1_name = models.CharField(max_length=200,blank=True, null=True)
 	movie_title = models.CharField(max_length=200,blank=True, null=True)
-	num_voted_users = models.IntegerField()
-	cast_total_facebook_likes = models.IntegerField()
+	num_voted_users = models.IntegerField(default=0)
+	cast_total_facebook_likes = models.IntegerField(default=0)
 	actor_3_name = models.CharField(max_length=200,blank=True, null=True)
-	facenumber_in_poster = models.IntegerField()
-	plot_keywords = models.CharField(max_length=200,blank=True, null=True)
+	facenumber_in_poster = models.IntegerField(default=0)
+	plot_keywords_ignore = models.CharField(max_length=200,blank=True, null=True)
 	movie_imdb_link = models.CharField(max_length=200,blank=True, null=True)
-	num_user_for_reviews = models.IntegerField()
+	num_user_for_reviews = models.IntegerField(default=0)
 	language = models.CharField(max_length=200,blank=True, null=True)
 	country = models.CharField(max_length=200,blank=True, null=True)
 	content_rating = models.CharField(max_length=200,blank=True, null=True)
-	budget = models.IntegerField()
-	title_year = models.IntegerField()
-	actor_2_facebook_likes = models.IntegerField()
-	imdb_score = models.IntegerField()
-	aspect_ratio = models.IntegerField()
-	movie_facebook_likes = models.IntegerField()
+	budget = models.IntegerField(default=0)
+	title_year = models.IntegerField(default=0)
+	actor_2_facebook_likes = models.IntegerField(default=0)
+	imdb_score = models.FloatField(default=0.0)
+	aspect_ratio = models.FloatField(default=0.0)
+	movie_facebook_likes = models.IntegerField(default=0)
 	genre = models.ManyToManyField(Genre)
 	plotline = models.ManyToManyField(PlotLine)
 
