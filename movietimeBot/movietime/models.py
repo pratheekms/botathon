@@ -1,14 +1,14 @@
 from __future__ import unicode_literals
 
 from django.db import models
-
+import json
 # Create your models here.
 
 class UserSteps(models.Model):
 
 	userId = models.CharField(max_length=100, blank=False, null=False)
 	userStep = models.IntegerField(default=0, blank=True,null=True)
-	context = models.TextField(blank=True, null=True)
+	context = models.TextField(default=json.dumps({}),blank=True, null=True)
 
 class Genre(models.Model):
 

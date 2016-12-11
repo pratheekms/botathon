@@ -17,19 +17,28 @@ from nltk.corpus import stopwords
 from nltk import word_tokenize
 stop = stopwords.words('english')
 
+import random
+
+def actor_suggestion():
+	m = MovieProperties.objects.filter(color__exact='Color').order_by('-gross')[:30]
+	res = []
+	for item in m:
+		if random.random() > 0.8:
+			res.append(item.actor_1_name.encode('ascii','ignore'))
+	return res[:5]
 
 def movie_suggestion_by_actor(actor_name):
 	m = MovieProperties.objects.filter(actor_1_name__iexact=actor_name)
 	res = []
 	for item in m:
-		res.append(item.movie_title)
-	return res
+		res.append(item.movie_title.encode('ascii','ignore'))
+	return res[:5]
 
 def movie_suggestion_by_director(director_name):
 	m = MovieProperties.objects.filter(director_name__iexact=director_name)
 	res = []
 	for item in m:
-		res.append(item.movie_title)
+		res.append(item.movie_title.encode('ascii','ignore'))
 	return res
 
 
@@ -38,7 +47,7 @@ def movie_suggestion_by_genre(genre_name):
 	m = MovieProperties.objects.filter(genre=g).order_by('-gross')[:10]
 	res = []
 	for item in m:
-		res.append(item.movie_title)
+		res.append(item.movie_title.encode('ascii','ignore'))
 	return res	
 
 def get_response(user_id, step):
