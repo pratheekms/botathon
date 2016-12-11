@@ -8,7 +8,7 @@ class UserSteps(models.Model):
 
 	userId = models.CharField(max_length=100, blank=False, null=False)
 	userStep = models.IntegerField(default=0, blank=True,null=True)
-
+	context = models.TextField(blank=True, null=True)
 
 class Genre(models.Model):
 
@@ -16,7 +16,7 @@ class Genre(models.Model):
 	
 
 	def __unicode__(self):
-		return self.genrename
+		return unicode(self.genrename) or u''
 
 
 class PlotLine(models.Model):
@@ -24,7 +24,7 @@ class PlotLine(models.Model):
 	plotname = models.CharField(max_length=200, blank=True, null=True)
 	
 	def __unicode__(self):
-		return self.plotname
+		return unicode(self.plotname) or u''
 
 
 
@@ -62,7 +62,7 @@ class MovieProperties(models.Model):
 	plotline = models.ManyToManyField(PlotLine)
 
 	def __unicode__(self):
-		return self.movie_title
+		return unicode(self.movie_title) or u''
 
 
 
