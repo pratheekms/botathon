@@ -18,14 +18,12 @@ class Genre(models.Model):
 	def __unicode__(self):
 		return unicode(self.genrename) or u''
 
-
 class PlotLine(models.Model):
 
 	plotname = models.CharField(max_length=200, blank=True, null=True)
 
 	def __unicode__(self):
 		return unicode(self.plotname) or u''
-
 
 
 class MovieProperties(models.Model):

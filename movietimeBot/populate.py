@@ -99,9 +99,14 @@ def populate_movieproperties():
 			except:
 				pass
 			movie_obj.save()
+<<<<<<< HEAD
+			genre_list = [x for x in row[10].split('|')]
+			plot_list = [x for x in row[17].split('|')]
+=======
 			genre_list = [x for x in row[9].split('|')]
 			plot_list = [x for x in row[16].split('|')]
 			# print genre_list, plot_list
+>>>>>>> develop
 			for genre in genre_list:
 				# print genre
 				genre_obj, created  = Genre.objects.get_or_create(genrename=genre)
