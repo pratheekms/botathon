@@ -13,7 +13,7 @@ class UserSteps(models.Model):
 class Genre(models.Model):
 
 	genrename = models.CharField(max_length=200,blank=True, null=True)
-	
+
 
 	def __unicode__(self):
 		return unicode(self.genrename) or u''
@@ -21,7 +21,7 @@ class Genre(models.Model):
 class PlotLine(models.Model):
 
 	plotname = models.CharField(max_length=200, blank=True, null=True)
-	
+
 	def __unicode__(self):
 		return unicode(self.plotname) or u''
 
@@ -61,23 +61,3 @@ class MovieProperties(models.Model):
 
 	def __unicode__(self):
 		return unicode(self.movie_title) or u''
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

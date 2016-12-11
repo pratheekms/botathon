@@ -10,16 +10,15 @@ from pyvirtualdisplay import Display
 import time
 import urllib
 
-movie = 'need for speed'
-movie_input = urllib.quote_plus(movie)
 response = ''
 
 
 class myScraper(object):
 	def __init__(self,movie):
-		url_final = "http://www.hotstar.com/search?q="+movie_input
-		# print (url_final)
-		self.url = url_final
+		movie_input = re.sub(' ','%20',movie)
+		self.url = "http://www.hotstar.com/search?q="+movie_input
+		print (self.url)
+		# self.url = url_final
 		self.display = Display(visible=0, size=(800, 600))
 		self.display.start()
 
@@ -31,6 +30,7 @@ class myScraper(object):
 		try:
 			browser = webdriver.Firefox()
 			browser.get(self.url)
+			time.sleep(3)
 
 			# browser.find_element_by_xpath('//*[@id="app-main-view"]/div/div[1]/div/div[1]/h3')
 
@@ -95,9 +95,9 @@ class myScraper(object):
 			#
 		except :
 			print 'Hotstar Except BLOCK'
-			response = false
+			response = False
 			return response
 
 if __name__ == '__main__':
-	scraper = myScraper('last bus')
+	scraper = myScraper('jolly llb')
 	scraper.scrape()
