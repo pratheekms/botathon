@@ -1,6 +1,6 @@
 from urllib2 import Request, urlopen, URLError
 import re
-
+import json
 string = []
 
 def get_tastekid_movie(movies):
@@ -11,17 +11,21 @@ def get_tastekid_movie(movies):
         string.append('%2C+')
     movie_list = ''.join(string)
     movie_list = movie_list[:-4]
-    print movie_list
-    return movie_list
+    # return movie_list
 
     # string = 'need+for+speed%2C+fast+and+furious'
     # headers = { 'User-Agent' : 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)' }
-    # req = Request('http://www.tastekid.com/api/similar?q='+movie_list+'&type=movies&k=107997-moviebot-IQH0CM4W')
-    #
-    # response = urlopen(req)
-    # rec_movies = response.read()
+    req = Request('http://www.tastekid.com/api/similar?q='+movie_list+'&type=movies&k=107997-moviebot-IQH0CM4W')
+    
+    response = urlopen(req)
+    rec_movies = response.read()
+    results = []
+    rec_movies = json.loads(rec_movies)
+    for item in rec_movies['Similar']['Results']:
+        results.append(item['Name'])
     # print rec_movies
-    # return rec_movies
+    # print results
+    return results[:5]
 
 if __name__ == "__main__":
-	get_tastekid_movie()
+	get_tastekid_movie(['V for Vendetta'])

@@ -51,6 +51,7 @@ class MovieTimeBot(generic.View):
 	def post(self, request, *args, **kwargs):
 
 		incoming_message = json.loads(self.request.body.decode('utf-8'))
+		print incoming_message['entry'],"**********************"
 		for entry in incoming_message['entry']:
 			for message in entry['messaging']:
 				if 'message' in message:
@@ -59,14 +60,18 @@ class MovieTimeBot(generic.View):
 					# step 1 replying with a user
 					fb_id = message['sender']['id']
 					usersteps_obj, Create = UserSteps.objects.get_or_create(userId=fb_id)
-					if message['message']['text'] == "Hey":
+					if message['message']['text'].lower() in ['hey','hi','hello','hola']:
 						print "check"
-						message = {"recipient":{"id":fb_id},"message":{"text":"Hey there . I am Movie PIRATE. I am here to help you find a good movie. You can just tell me what you want, in a good movie and il be picking for you. It could be something like 'A movie which involves stealing a car' or you can select one of these to search as well","quick_replies":[{"content_type":"text","title":"Actor","payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_RED"},{"content_type":"text","title":"Genre","payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_GREEN"},]}}
+						message = {"recipient":{"id":fb_id},"message":{"text":"Who is yer favorite pirate yee hhharr? I am MoViEPiRaTe!! Here to help you find a good movie \n I will find the best movie for you.","quick_replies":[{"content_type":"text","title":"Actor","payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_RED"},{"content_type":"text","title":"Genre","payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_GREEN"},]}}
 						self.send_message(message,fb_id)
 						user_obj, Create = UserSteps.objects.get_or_create(userId=fb_id)
 						user_obj.userStep = 1
 						user_obj.context = json.dumps({})
 						user_obj.save()
+					# if message['message']['text'] == "something else":
+					# 	user_obj, Create = UserSteps.objects.get_or_create(userId=fb_id)
+					# 	context = json.loads(user_obj.context)
+
 
 					elif message['message']['text'] == 'Actor':
 						print "Actor"
@@ -84,7 +89,7 @@ class MovieTimeBot(generic.View):
 							print actor
 							message["message"]["quick_replies"].append({"content_type":"text","title":actor,"payload":actor})
 
-						message["message"]["quick_replies"].append({"content_type":"text","title":"something else","payload":"something else"})
+						# message["message"]["quick_replies"].append({"content_type":"text","title":"something else","payload":"something else"})
 						print message
 						context = json.loads(user_obj.context)
 						context['actors'] = actor_suggestion
@@ -98,11 +103,24 @@ class MovieTimeBot(generic.View):
 					elif message['message']['text'] == 'Genre':
 						print 'Genre'
 						# some functions of pratheeks
-						message = {"recipient":{"id":fb_id},"message":{"text":'Genre'}}
-						self.send_message(message,fb_id)
 						user_obj, Create = UserSteps.objects.get_or_create(userId=fb_id)
 						user_obj.userStep = 2
+						user_obj.save()
 
+						genre_suggestion = logic.genre_suggestion()
+						message = {"recipient":{"id":fb_id},"message":{"text":"May be you will like some of these genres","quick_replies":[]}}
+						for genre in genre_suggestion:
+							print genre
+							message["message"]["quick_replies"].append({"content_type":"text","title":genre,"payload":genre})
+
+						# message["message"]["quick_replies"].append({"content_type":"text","title":"something else","payload":"something else"})
+						print message
+						context = json.loads(user_obj.context)
+						context['genres'] = genre_suggestion
+						print context
+						user_obj.context  = json.dumps(context)
+						user_obj.save()
+						self.send_message(message,fb_id)
 
 
 					else:
@@ -122,26 +140,41 @@ class MovieTimeBot(generic.View):
 							user_obj.context  = json.dumps(context)
 							user_obj.save()	
 							
-							hotstar = hotstar_scrape(input_payload)
-							hotstar_status = hotstar.scrape()
-							netflix = netflix_scrape(input_payload)
-							netflix_status = netflix.scrape()
-							pvr = pvr_scrape(input_payload)
-							pvr_status = pvr.scrape()
+							# self.send_message({"recipient":{"id":fb_id},"sender_action":"typing_on"}, fb_id)
+							# hotstar = hotstar_scrape(input_payload)
+							# hotstar_status = hotstar.scrape()
+							hotstar_status = 'Available'
+							# netflix = netflix_scrape(input_payload)
+							# netflix_status = netflix.scrape()
+							netflix_status = 'Not Available'
+							# pvr = pvr_scrape(input_payload)
+							# pvr_status = pvr.scrape()
+							pvr_status = 'Not Available'
 							more_movies = taste_kid.get_tastekid_movie([input_payload,])
-
-							# p_id1 = Process(target = hotstar.scrape, args=())
-							# p_id2 = Process(target = netflix.scrape, args=())
-							# p_id3 = Process(target = pvr.scrape, args=())
-
-							# p_id1.start()
-							# p_id2.start()
-							# p_id3.start()
 							print more_movies
-							print hotstar_status
-							print netflix_status
-							print pvr_status
+							import time
+							message = {"recipient":{"id":fb_id},"message":{"text":"PVR : "+pvr_status,}}
+							self.send_message(message,fb_id)
+							time.sleep(3)
+							message = {"recipient":{"id":fb_id},"message":{"text":"Netflix : "+netflix_status,}}
+							self.send_message(message,fb_id)
+							time.sleep(6)
 
+							message = {"recipient":{"id":fb_id},"message":{"text":"Hotstar : "+hotstar_status,}}
+							self.send_message(message,fb_id)
+							time.sleep(4)
+
+							# self.send_message({"recipient":{"id":fb_id},"sender_action":"typing_on"},fb_id)
+							message = {"recipient":{"id":fb_id},"message":{"text":"I feel You would like these ones as well","quick_replies":[]}}
+
+							for movie in more_movies:
+								print movie
+								message["message"]["quick_replies"].append({"content_type":"text","title":movie,"payload":movie})
+
+							# message["message"]["quick_replies"].append({"content_type":"text","title":"something else","payload":"something else"})
+
+							self.send_message(message,fb_id)
+							
 							message = {
 										 "recipient":{
 										   "id":fb_id
@@ -149,17 +182,22 @@ class MovieTimeBot(generic.View):
 										 "message":{
 										   "attachment":{
 										     "type":"image",
-										     "text":netflix_status,
 										     "payload":{
-										       "url":"https://lh5.googleusercontent.com/-9El0rLwfX5E/AAAAAAAAAAI/AAAAAAAAIl8/S4IbyT2gTMo/s0-c-k-no-ns/photo.jpg"
+										       "url":"https://i.ytimg.com/vi/dnu1TxoyrVY/maxresdefault.jpg"
 										     }
 										   }
 										 }
 										}
 							self.send_message(message,fb_id)
+							message = {"recipient":{"id":fb_id},"message":{"text":"See ya on the high tide ol buddy. Ba bye. Have fun"}}
+							self.send_message(message,fb_id)
+							user_obj.context = json.dumps({'done':'done'})
+							user_obj.save()
+							import sys
+							sys.exit()
 						elif 'actors' in context and input_text in context['actors']:
 
-							message = {"recipient":{"id":fb_id},"message":{"text":"Do you like any of these movies?","quick_replies":[]}}
+							message = {"recipient":{"id":fb_id},"message":{"text":"Almost there and Keep trying I promise you will hit your next dream movie!","quick_replies":[]}}
 							#check if actor suggestion
 							user_obj, Create = UserSteps.objects.get_or_create(userId=fb_id)
 							movie_suggestion = []
@@ -177,7 +215,29 @@ class MovieTimeBot(generic.View):
 								print movie
 								message["message"]["quick_replies"].append({"content_type":"text","title":movie,"payload":movie})
 
-							message["message"]["quick_replies"].append({"content_type":"text","title":"something else","payload":"something else"})
+							# message["message"]["quick_replies"].append({"content_type":"text","title":"something else","payload":"something else"})
+							self.send_message(message,fb_id)
+
+						elif 'genres' in context and input_text in context['genres']:
+							message = {"recipient":{"id":fb_id},"message":{"text":"Almost there and Keep trying I promise you will hit your next dream movie!","quick_replies":[]}}
+							#check if actor suggestion
+							user_obj, Create = UserSteps.objects.get_or_create(userId=fb_id)
+							movie_suggestion = []
+							movie_suggestion = logic.movie_suggestion_by_genre(input_text)
+
+							context['movies'] = movie_suggestion
+							context['genres'] = [input_text,]
+							user_obj.userStep = 3
+							user_obj.context  = json.dumps(context)
+							user_obj.save()							
+
+
+							# return movies block						
+							for movie in movie_suggestion:
+								print movie
+								message["message"]["quick_replies"].append({"content_type":"text","title":movie,"payload":movie})
+
+							# message["message"]["quick_replies"].append({"content_type":"text","title":"something else","payload":"something else"})
 
 
 							self.send_message(message,fb_id)

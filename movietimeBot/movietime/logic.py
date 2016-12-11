@@ -8,7 +8,7 @@
 # import django
 # django.setup()
 
-from models import UserSteps, PlotLine, MovieProperties
+from models import UserSteps, PlotLine, MovieProperties, Genre
 
 from spacy.en import English
 nlp = English()
@@ -23,8 +23,16 @@ def actor_suggestion():
 	m = MovieProperties.objects.filter(color__exact='Color').order_by('-gross')[:30]
 	res = []
 	for item in m:
-		if random.random() > 0.8:
+		if random.random() > 0.5:
 			res.append(item.actor_1_name.encode('ascii','ignore'))
+	return res[:5]
+
+def genre_suggestion():
+	m = Genre.objects.all()
+	res = []
+	for item in m:
+		if random.random() > 0.8 and item not in ['',None]:
+			res.append(item.genrename.encode('ascii','ignore'))
 	return res[:5]
 
 def movie_suggestion_by_actor(actor_name):
