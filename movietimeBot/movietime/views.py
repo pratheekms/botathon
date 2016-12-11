@@ -63,3 +63,9 @@ class MovieTimeBot(generic.View):
 		# 				response_msg = json.dumps({"recipient":{"id":fb_id}, "message":{"text": movies_details}})
 
 
+class Test(generic.View):
+	def get(self, request, *args, **kwargs):
+		from logic import get_movie_plot
+		# print get_movie_plot("movie which involves stealing a car")
+		# print get_movie_plot("movie with an alien invasion")
+		return HttpResponse('test')
