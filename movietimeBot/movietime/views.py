@@ -6,6 +6,7 @@ from django.http.response import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 import requests
+from models import UserSteps
 from pymessenger.bot import Bot
 
 # Create your views here.
@@ -48,26 +49,48 @@ class MovieTimeBot(generic.View):
 					print message['sender']['id']
 					# step 1 replying with a user
 					fb_id = message['sender']['id']
-					# user_details_url = "https://graph.facebook.com/v2.6/%s"%fb_id
-					# user_details_params = {'fields':'first_name,last_name,profile_pic', 'access_token':'%s' % self.access_token}
-					# user_details = requests.get(user_details_url, user_details_params).json()
-					# print user_details, "user details"
-					# if 'first_name' in user_details:
-					# 	first_name = user_details['first_name']
-					if message['text'] == "Hey":
-						check_message = "Hey there . I am Movie PIRATE. I am here to help you find a good movie. You can just tell me what you want, in a good movie and il be picking for you. It could be something like 'A movie which involves stealing a car' or you can select one of these to search as well" 
-						self.bot.send_text_message(fb_id, check_message)
-					
+					usersteps_obj, Create = UserSteps.objects.get_or_create(userId=fb_id)
+					if message['message']['text'] == "Hey":
+						print "check"
+						message = {"recipient":{"id":fb_id},"message":{"text":"Hey there . I am Movie PIRATE. I am here to help you find a good movie. You can just tell me what you want, in a good movie and il be picking for you. It could be something like 'A movie which involves stealing a car' or you can select one of these to search as well","quick_replies":[{"content_type":"text","title":"Actor","payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_RED"},{"content_type":"text","title":"Genre","payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_GREEN"},]}}
+						self.send_message(message,fb_id)
+						user_obj, Create = UserSteps.objects.get_or_create(userId=fb_id)
+						user_obj.userStep = 1
+
+					if message['message']['text'] == 'Actor':
+						print "Actor"
+						message = {"recipient":{"id":fb_id},"message":{"text":"Actor"}}
+						self.send_message(message,fb_id)
+
+					# 	# some function of pratheeks
+						user_obj, Create = UserSteps.objects.get_or_create(userId=fb_id)
+						user_obj.userStep = 2
+
+
+					if message['message']['text'] == 'Genre':
+						print 'Genre'
+						# some functions of pratheeks
+						message = {"recipient":{"id":fb_id},"message":{"text":'Genre'}}
+						self.send_message(message,fb_id)
+						user_obj, Create = UserSteps.objects.get_or_create(userId=fb_id)
+						user_obj.userStep = 2
+
 					else:
-						pass 
-					# message = {"recipient":{"id":fb_id}, "message":{"text": check_message}}
-					# self.send_message(message, fb_id)
+						# catch string 
+						pass
 
-					# check_message = {"recipient":{"id":fb_id}, "message": {"text":"or you can select one of these options to search as well","quick_replies":[{"content_type":"text","title":"Actor","payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_RED"},{"content_type":"text","title":"Genre","payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_GREEN"}, {"content_type":"text","title":"Director","payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_DIRECTOR"}]}}
-					# self.send_message(check_message,fb_id)
+						# input_text = message['message']['text']
+						# print input_text
+						# message = {"recipient":{"id":fb_id},"message":{"text":input_text}}
+						# self.send_message(message,fb_id)
+						# user_obj, Create = UserSteps.objects.get_or_create(userId=fb_id)
+						# user_obj.userStep = 2
 
 
 
+
+					
+					
 
 
 
